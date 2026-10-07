@@ -104,9 +104,10 @@ public static class SystemRegistration
                 regApps.SetValue(AppKey, $@"{clientPath}\Capabilities");
             }
 
-            // 3. HKCU\Software\Classes\LinkFlowURL (Must include "URL Protocol" = "")
-            using (var progKey = Registry.CurrentUser.CreateSubKey($@"Software\Classes\{ProgId}"))
+            // 3. HKCU\Software\Classes\LinkFlowURL & FluentPickerURL (Backward Compatibility)
+            foreach (var pId in new[] { ProgId, "FluentPickerURL", "LinkFlowHTML" })
             {
+                using var progKey = Registry.CurrentUser.CreateSubKey($@"Software\Classes\{pId}");
                 progKey.SetValue(null, "LinkFlow HTML Document / URL");
                 progKey.SetValue("URL Protocol", "");
                 progKey.SetValue("FriendlyTypeName", AppName);
@@ -124,10 +125,12 @@ public static class SystemRegistration
             using (var httpOpenWith = Registry.CurrentUser.CreateSubKey(@"Software\Classes\http\OpenWithProgids"))
             {
                 httpOpenWith.SetValue(ProgId, string.Empty);
+                httpOpenWith.SetValue("FluentPickerURL", string.Empty);
             }
             using (var httpsOpenWith = Registry.CurrentUser.CreateSubKey(@"Software\Classes\https\OpenWithProgids"))
             {
                 httpsOpenWith.SetValue(ProgId, string.Empty);
+                httpsOpenWith.SetValue("FluentPickerURL", string.Empty);
             }
 
             return true;

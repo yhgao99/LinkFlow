@@ -51,6 +51,14 @@ public static class BrowserLauncher
                     {
                         sb.Append("--no-default-browser-check ");
                     }
+                    if (!currentStr.Contains("DefaultBrowserPromptRefresh"))
+                    {
+                        sb.Append("--disable-features=DefaultBrowserPromptRefresh ");
+                    }
+                    if (!currentStr.Contains("--no-first-run"))
+                    {
+                        sb.Append("--no-first-run ");
+                    }
                 }
             }
 
