@@ -1,0 +1,44 @@
+## Build & Binary outputs
+[Bb]in/
+[Oo]bj/
+publish/
+publish_*/
+dist/
+*.exe.manifest
+*.dll
+*.exe
+*.pdb
+*.msi
+*.zip
+
+# Exclude generated build caches and logs
+*.log
+crash.log
+*.tmp
+*.temp
+
+## Visual Studio & VS Code
+.vs/
+.vscode/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.ide/
+*.suo
+*.sln.docstates
+
+## JetBrains Rider
+.idea/
+*.sln.iml
+
+## OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+## Keep icons in root
+!app_icon.ico
+!web_icon.ico

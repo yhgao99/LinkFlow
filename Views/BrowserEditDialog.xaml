@@ -1,0 +1,293 @@
+<Window x:Class="LinkFlow.Views.BrowserEditDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        Title="编辑浏览器属性与标签"
+        Width="440"
+        SizeToContent="Height"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent">
+
+    <Border Background="#1A1A26"
+            BorderBrush="#383850"
+            BorderThickness="1"
+            CornerRadius="14"
+            Padding="22">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" /> <!-- Header -->
+                <RowDefinition Height="Auto" /> <!-- Form Primary -->
+                <RowDefinition Height="Auto" /> <!-- Live Preview -->
+                <RowDefinition Height="Auto" /> <!-- Advanced Options (Collapsible) -->
+                <RowDefinition Height="Auto" /> <!-- Footer Buttons -->
+            </Grid.RowDefinitions>
+
+            <!-- 1. Header -->
+            <Grid Grid.Row="0" Margin="0,0,0,16" MouseLeftButtonDown="Header_MouseLeftButtonDown">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0"
+                        Width="38"
+                        Height="38"
+                        CornerRadius="8"
+                        Background="#10FFFFFF"
+                        Margin="0,0,12,0"
+                        VerticalAlignment="Center">
+                    <Image x:Name="BrowserIconImage"
+                           Width="26"
+                           Height="26"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           RenderOptions.BitmapScalingMode="HighQuality" />
+                </Border>
+
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Text="编辑浏览器"
+                               FontSize="15"
+                               FontWeight="Bold"
+                               Foreground="#FFFFFF" />
+                    <TextBlock x:Name="OriginalPathBlock"
+                               FontSize="11"
+                               Foreground="#7E7E94"
+                               TextTrimming="CharacterEllipsis"
+                               Margin="0,2,0,0" />
+                </StackPanel>
+
+                <Button Grid.Column="2"
+                        Style="{StaticResource FluentSubtleButton}"
+                        Click="CloseButton_Click"
+                        Padding="6,4"
+                        VerticalAlignment="Top">
+                    <ui:SymbolIcon Symbol="Dismiss16" Foreground="#94A3B8" />
+                </Button>
+            </Grid>
+
+            <!-- 2. Primary Form (High-Frequency Fields) -->
+            <StackPanel Grid.Row="1">
+                <!-- Display Name -->
+                <Grid Margin="0,0,0,6">
+                    <TextBlock Text="显示名称"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="#E2E8F0"
+                               VerticalAlignment="Center" />
+                    <Button Style="{StaticResource FluentSubtleButton}"
+                            Click="ResetNameButton_Click"
+                            ToolTip="恢复为原始程序默认名称"
+                            HorizontalAlignment="Right"
+                            Padding="6,2">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="ArrowCounterclockwise16" Foreground="#7E7E94" Margin="0,0,4,0" VerticalAlignment="Center" />
+                            <TextBlock Text="恢复默认" FontSize="11" Foreground="#7E7E94" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
+                <TextBox x:Name="NameTextBox"
+                         Style="{StaticResource FluentTextBoxStyle}"
+                         Height="34"
+                         Padding="8,6"
+                         TextChanged="Input_TextChanged" />
+
+                <!-- Scene Tag -->
+                <Grid Margin="0,12,0,6">
+                    <TextBlock Text="场景标签"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="#E2E8F0"
+                               VerticalAlignment="Center" />
+                    <TextBlock Text="建议 2~4 个字"
+                               FontSize="11"
+                               Foreground="#64748B"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center" />
+                </Grid>
+                <TextBox x:Name="TagTextBox"
+                         Style="{StaticResource FluentTextBoxStyle}"
+                         Height="34"
+                         MaxLength="8"
+                         Padding="8,6"
+                         TextChanged="Input_TextChanged" />
+
+                <!-- Quick Presets -->
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,14">
+                    <Button Style="{StaticResource FluentPresetPillButton}" Content="🏢 办公" Click="PresetTag_Click" Tag="办公" Margin="0,0,6,0" Padding="8,3" FontSize="11" />
+                    <Button Style="{StaticResource FluentPresetPillButton}" Content="🏠 个人" Click="PresetTag_Click" Tag="个人" Margin="0,0,6,0" Padding="8,3" FontSize="11" />
+                    <Button Style="{StaticResource FluentPresetPillButton}" Content="💻 开发" Click="PresetTag_Click" Tag="开发" Margin="0,0,6,0" Padding="8,3" FontSize="11" />
+                    <Button Style="{StaticResource FluentPresetPillButton}" Content="🧪 测试" Click="PresetTag_Click" Tag="测试" Margin="0,0,6,0" Padding="8,3" FontSize="11" />
+                    <Button Style="{StaticResource FluentPresetPillButton}" Content="✕ 清空" Click="PresetTag_Click" Tag="" Padding="8,3" FontSize="11" />
+                </StackPanel>
+
+                <!-- Enable / Disable Switch -->
+                <Grid Margin="0,0,0,14">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="启用此浏览器" FontSize="12" FontWeight="SemiBold" Foreground="#E2E8F0" />
+                        <TextBlock Text="停用后不会出现在选择器与分流列表中" FontSize="11" Foreground="#64748B" Margin="0,2,0,0" />
+                    </StackPanel>
+                    <ui:ToggleSwitch Grid.Column="1" x:Name="IsEnabledSwitch" VerticalAlignment="Center" />
+                </Grid>
+            </StackPanel>
+
+            <!-- 3. Live Preview Card -->
+            <Border Grid.Row="2"
+                    Background="#12121E"
+                    BorderBrush="#262638"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="12,8"
+                    Margin="0,0,0,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               Text="效果预览"
+                               FontSize="11"
+                               Foreground="#64748B"
+                               VerticalAlignment="Center"
+                               Margin="0,0,10,0" />
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Image x:Name="PreviewIconImage"
+                               Width="18"
+                               Height="18"
+                               Margin="0,0,6,0"
+                               VerticalAlignment="Center"
+                               RenderOptions.BitmapScalingMode="HighQuality" />
+
+                        <TextBlock x:Name="PreviewNameText"
+                                   Text="Browser Name"
+                                   FontSize="12.5"
+                                   FontWeight="SemiBold"
+                                   Foreground="#FFFFFF"
+                                   VerticalAlignment="Center" />
+
+                        <Border x:Name="PreviewTagBadge"
+                                CornerRadius="4"
+                                Background="#1838BDF8"
+                                BorderBrush="#3338BDF8"
+                                BorderThickness="1"
+                                Padding="5,1"
+                                Margin="6,0,0,0"
+                                VerticalAlignment="Center">
+                            <TextBlock x:Name="PreviewTagText"
+                                       Text="办公"
+                                       FontSize="10"
+                                       FontWeight="Medium"
+                                       Foreground="#7DD3FC"
+                                       VerticalAlignment="Center" />
+                        </Border>
+
+                        <Border x:Name="PreviewHotkeyBadge"
+                                CornerRadius="4"
+                                Background="#0C253B"
+                                BorderBrush="#0284C7"
+                                BorderThickness="1"
+                                Padding="6,1"
+                                Margin="6,0,0,0"
+                                VerticalAlignment="Center"
+                                Visibility="Collapsed">
+                            <TextBlock x:Name="PreviewHotkeyText"
+                                       Text="1"
+                                       FontSize="10.5"
+                                       FontWeight="Bold"
+                                       Foreground="#38BDF8"
+                                       VerticalAlignment="Center" />
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- 4. Advanced Options Section (Collapsible) -->
+            <StackPanel Grid.Row="3" Margin="0,0,0,14">
+                <Button x:Name="AdvancedSectionToggle"
+                        Style="{StaticResource FluentSubtleButton}"
+                        Click="AdvancedSectionToggle_Click"
+                        HorizontalAlignment="Left"
+                        Padding="2,4"
+                        Margin="0,0,0,6">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Name="AdvancedToggleArrow" Text="▶" FontSize="9" Foreground="#64748B" VerticalAlignment="Center" Margin="0,0,6,0" />
+                        <TextBlock Text="高级设置 (快捷键与启动参数)" FontSize="11.5" Foreground="#94A3B8" FontWeight="Medium" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+
+                <StackPanel x:Name="AdvancedSectionPanel" Visibility="Collapsed" Margin="0,2,0,4">
+                    <Border Background="#10FFFFFF"
+                            BorderBrush="#1BFFFFFF"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="12,10">
+                        <StackPanel>
+                            <!-- Custom Hotkey -->
+                            <Grid Margin="0,0,0,6">
+                                <TextBlock Text="专属快捷键" FontSize="11.5" FontWeight="SemiBold" Foreground="#CBD5E1" VerticalAlignment="Center" />
+                                <TextBlock Text="按键盘直接录入，按退格清除" FontSize="11" Foreground="#64748B" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                            </Grid>
+                            <TextBox x:Name="HotkeyTextBox"
+                                     Style="{StaticResource FluentTextBoxStyle}"
+                                     Height="32"
+                                     Padding="8,5"
+                                     MaxLength="1"
+                                     PreviewKeyDown="HotkeyTextBox_PreviewKeyDown"
+                                     TextChanged="Input_TextChanged" />
+
+                            <!-- Privacy Args -->
+                            <Grid Margin="0,10,0,6">
+                                <TextBlock Text="无痕模式启动参数" FontSize="11.5" FontWeight="SemiBold" Foreground="#CBD5E1" VerticalAlignment="Center" />
+                                <TextBlock Text="Alt + 快捷键触发" FontSize="11" Foreground="#64748B" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                            </Grid>
+                            <TextBox x:Name="PrivacyArgsTextBox"
+                                     Style="{StaticResource FluentTextBoxStyle}"
+                                     Height="32"
+                                     Padding="8,5" />
+
+                            <!-- Additional Args -->
+                            <TextBlock Text="常规附加启动参数 (例如 --user-data-dir=...)"
+                                       FontSize="11.5"
+                                       FontWeight="SemiBold"
+                                       Foreground="#CBD5E1"
+                                       Margin="0,10,0,6" />
+                            <TextBox x:Name="ArgsTextBox"
+                                     Style="{StaticResource FluentTextBoxStyle}"
+                                     Height="32"
+                                     Padding="8,5" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- 5. Footer Buttons -->
+            <Grid Grid.Row="4">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <ui:Button Appearance="Secondary"
+                               Click="CloseButton_Click"
+                               Margin="0,0,8,0"
+                               Padding="16,6"
+                               Content="取消" />
+                    <ui:Button Appearance="Primary"
+                               Click="SaveButton_Click"
+                               Padding="18,6"
+                               Content="保存更改">
+                        <ui:Button.Icon>
+                            <ui:SymbolIcon Symbol="Save20" />
+                        </ui:Button.Icon>
+                    </ui:Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
