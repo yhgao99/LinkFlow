@@ -1,11 +1,14 @@
 <div align="center">
 
+<img src="app_icon.png" width="96" height="96" alt="LinkFlow Logo" />
+
 # LinkFlow 🌐
 
 **专为 Windows 11 设计的现代化、闪电响应式智能浏览器路由与外链分流利器**
 
 *Fluent Browser Router & Smart URL Dispatcher for Windows 11*
 
+[![Release](https://img.shields.io/github/v/release/yhgao99/LinkFlow?color=blue)](https://github.com/yhgao99/LinkFlow/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![.NET 10.0](https://img.shields.io/badge/.NET-10.0-512BD4.svg)](https://dotnet.microsoft.com/)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2011%20%7C%2010-0078D6.svg)](https://microsoft.com)
@@ -78,7 +81,7 @@
 ## 🚀 安装与使用
 
 ### 1. 下载程序
-前往 [Releases 页面](../../releases) 下载最新发行版：
+前往 [GitHub Releases 页面](https://github.com/yhgao99/LinkFlow/releases) 下载最新发行版：
 - **`LinkFlow-portable-x64.zip`（轻量便携版，约 1MB）**：适合电脑已安装 .NET 10 运行时的用户。
 - **`LinkFlow-standalone-x64.zip`（独立绿色版，约 60MB）**：自带完整运行环境，无需安装任何前置依赖，解压即用。
 
@@ -100,7 +103,7 @@
 ### 常用命令
 ```powershell
 # 1. 克隆仓库
-git clone https://github.com/<your-username>/LinkFlow.git
+git clone https://github.com/yhgao99/LinkFlow.git
 cd LinkFlow
 
 # 2. 还原与编译
